@@ -1,0 +1,12 @@
+{
+  "name": "kuroo-prototype",
+  "version": "1.0.0",
+  "description": "Prototype chat experience for Kuroo in Yugen Kitan.",
+  "private": true,
+  "dependencies": {
+    "openai": "^5.12.2"
+  },
+  "scripts": {
+    "start": "node server.js"
+  }
+}

@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>黒狼 | 幽玄奇譚</title>
+    <script>
+      document.documentElement.dataset.runtime =
+        window.location.protocol === "file:" ? "file" : "server";
+    </script>
+    <style>
+      html[data-runtime="file"] body {
+        margin: 0;
+        min-height: 100vh;
+        background: #07080a;
+        color: #e6e1d6;
+        font-family: "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
+      }
+
+      html[data-runtime="file"] .app-shell,
+      html[data-runtime="file"] .backdrop {
+        display: none;
+      }
+
+      .file-runtime-notice {
+        display: none;
+      }
+
+      html[data-runtime="file"] .file-runtime-notice {
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        padding: 24px;
+      }
+
+      .file-runtime-card {
+        width: min(640px, 100%);
+        padding: 28px;
+        border-radius: 24px;
+        border: 1px solid rgba(222, 209, 181, 0.14);
+        background: rgba(19, 22, 27, 0.92);
+        box-shadow: 0 24px 60px rgba(0, 0, 0, 0.42);
+      }
+
+      .file-runtime-card h1 {
+        margin: 0 0 12px;
+        font-family: "Hiragino Mincho ProN", "Yu Mincho", serif;
+        font-size: 2rem;
+        font-weight: 500;
+        letter-spacing: 0.08em;
+      }
+
+      .file-runtime-card p {
+        margin: 0 0 12px;
+        line-height: 1.8;
+        color: #d4cdbc;
+      }
+
+      .file-runtime-card a {
+        color: #ded1b5;
+      }
+    </style>
+    <link rel="stylesheet" href="./styles.css?v=20260426-kin-1" />
+  </head>
+  <body>
+    <section class="file-runtime-notice" aria-live="polite">
+      <div class="file-runtime-card">
+        <h1>黒狼</h1>
+        <p>`file://` 直開きは正式な実行経路ではありません。</p>
+        <p>この黒狼は、ローカルサーバー越しの気配にだけ応じます。</p>
+        <p><a href="http://localhost:3000/">http://localhost:3000/</a> で開いてください。</p>
+      </div>
+    </section>
+    <div class="backdrop"></div>
+    <main class="app-shell">
+      <section class="panel">
+        <header class="panel-header">
+          <div>
+            <p class="eyebrow">YUGEN KITAN PROTOTYPE</p>
+            <h1>幽玄奇譚</h1>
+            <div class="state-readout state-readout-inline">
+              <span class="state-heading">現在の状態</span>
+            </div>
+          </div>
+        </header>
+
+        <section class="state-switcher" aria-label="黒狼の状態切り替え">
+          <button class="state-button is-active" data-state="kuroo" type="button">黒狼</button>
+          <button class="state-button" data-state="getsurou" type="button">月狼</button>
+          <button class="state-button" data-state="teneirou" type="button">天影狼</button>
+          <button class="state-button" data-state="kinmourou" type="button">金毛狼</button>
+          <button class="state-button" data-state="gokurou" type="button">獄狼</button>
+          <button class="state-button" data-state="narakurou" type="button">奈落狼</button>
+        </section>
+
+        <section class="presence">
+          <p id="presence-line">……気配はまだ浅い。</p>
+        </section>
+
+        <section class="chat-log" id="chat-log" aria-live="polite"></section>
+
+        <form class="chat-form" id="chat-form">
+          <label class="sr-only" for="message-input">黒狼に言葉を置く</label>
+          <textarea
+            id="message-input"
+            name="message"
+            rows="3"
+            maxlength="220"
+            placeholder="言葉を置いていけ"
+          ></textarea>
+          <button type="submit" id="send-button">送信</button>
+        </form>
+      </section>
+    </main>
+    <section class="state-presence" id="state-presence" aria-hidden="true">
+      <img class="state-presence-image" id="state-presence-image" alt="" />
+      <div class="state-presence-noise"></div>
+    </section>
+    <section class="state-vision" id="state-vision" aria-hidden="true">
+      <div class="state-vision-backdrop"></div>
+      <img class="state-vision-image" id="state-vision-image" alt="" />
+    </section>
+    <section class="naraku-overlay" id="naraku-overlay" aria-hidden="true">
+      <div class="naraku-noise"></div>
+      <p class="naraku-caption">記録されました</p>
+    </section>
+
+    <template id="message-template">
+      <article class="message">
+        <div class="message-role"></div>
+        <p class="message-body"></p>
+      </article>
+    </template>
+
+    <script src="./app.js?v=20260426-scroll-1"></script>
+  </body>
+</html>

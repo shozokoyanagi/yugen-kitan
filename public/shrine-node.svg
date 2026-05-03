@@ -1,0 +1,29 @@
+<svg width="1200" height="800" viewBox="0 0 1200 800" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="800" fill="#050505"/>
+  <ellipse cx="600" cy="160" rx="230" ry="96" fill="url(#glow)"/>
+  <ellipse cx="600" cy="542" rx="320" ry="130" fill="url(#mist)" opacity="0.46"/>
+  <path d="M430 628H770" stroke="#3E352E" stroke-width="8" stroke-linecap="round"/>
+  <path d="M492 585H708" stroke="#655A50" stroke-width="6" stroke-linecap="round"/>
+  <path d="M455 603L518 474H682L745 603" stroke="#A99B8A" stroke-opacity="0.72" stroke-width="10" stroke-linejoin="round"/>
+  <path d="M522 474V650" stroke="#7A6B5D" stroke-width="10"/>
+  <path d="M678 474V650" stroke="#7A6B5D" stroke-width="10"/>
+  <path d="M600 412L670 474H530L600 412Z" fill="#B4A18C" fill-opacity="0.82"/>
+  <rect x="560" y="510" width="80" height="118" rx="10" fill="#120F0E" stroke="#A99B8A" stroke-opacity="0.64" stroke-width="5"/>
+  <path d="M584 548H616" stroke="#D8C7B0" stroke-opacity="0.62" stroke-width="4" stroke-linecap="round"/>
+  <path d="M340 694C392 656 438 640 514 632" stroke="#4A423B" stroke-width="6" stroke-linecap="round" opacity="0.7"/>
+  <path d="M686 632C762 640 808 656 860 694" stroke="#4A423B" stroke-width="6" stroke-linecap="round" opacity="0.7"/>
+  <circle cx="600" cy="560" r="18" fill="#8E2D24"/>
+  <circle cx="600" cy="560" r="40" fill="#8E2D24" fill-opacity="0.24"/>
+  <path d="M232 124C292 92 364 96 420 140" stroke="#7D2B22" stroke-opacity="0.36" stroke-width="3"/>
+  <path d="M970 110C904 90 840 104 788 146" stroke="#7D2B22" stroke-opacity="0.28" stroke-width="3"/>
+  <defs>
+    <radialGradient id="glow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(600 160) rotate(90) scale(96 230)">
+      <stop stop-color="#E6DCC7" stop-opacity="0.3"/>
+      <stop offset="1" stop-color="#E6DCC7" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="mist" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(600 542) rotate(90) scale(130 320)">
+      <stop stop-color="#7E1813" stop-opacity="0.4"/>
+      <stop offset="1" stop-color="#7E1813" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+</svg>

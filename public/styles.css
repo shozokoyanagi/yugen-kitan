@@ -1,0 +1,755 @@
+:root {
+  --bg: #07080a;
+  --bg-deep: #030405;
+  --panel: rgba(12, 15, 18, 0.82);
+  --panel-edge: rgba(173, 186, 195, 0.12);
+  --text: #e6e1d6;
+  --muted: #9e9788;
+  --accent: #b3a58a;
+  --accent-strong: #ded1b5;
+  --danger: #8d524d;
+  --divine: #a9b6aa;
+  --shadow: rgba(0, 0, 0, 0.5);
+  --font-display: "Hiragino Mincho ProN", "Yu Mincho", serif;
+  --font-body: "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: var(--font-body);
+  color: var(--text);
+  background:
+    radial-gradient(circle at top, rgba(109, 111, 117, 0.15), transparent 28%),
+    radial-gradient(circle at 20% 20%, rgba(79, 60, 56, 0.18), transparent 25%),
+    linear-gradient(180deg, var(--bg) 0%, var(--bg-deep) 100%);
+  overflow: hidden;
+}
+
+.backdrop {
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(circle at 50% 15%, rgba(255, 244, 214, 0.04), transparent 18%),
+    radial-gradient(circle at 50% 80%, rgba(255, 244, 214, 0.025), transparent 22%);
+  filter: blur(8px);
+  pointer-events: none;
+  animation: drift 10s ease-in-out infinite alternate;
+}
+
+.app-shell {
+  position: relative;
+  z-index: 3;
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  transition:
+    opacity 900ms ease,
+    filter 900ms ease,
+    transform 900ms ease;
+}
+
+.panel {
+  width: min(760px, 100%);
+  height: min(840px, calc(100vh - 48px));
+  display: grid;
+  grid-template-rows: auto auto auto 1fr auto;
+  gap: 18px;
+  padding: 28px;
+  border: 1px solid var(--panel-edge);
+  border-radius: 24px;
+  background:
+    linear-gradient(180deg, rgba(19, 22, 27, 0.92), rgba(8, 10, 13, 0.92));
+  box-shadow:
+    0 24px 60px var(--shadow),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(12px);
+  overflow: hidden;
+}
+
+.panel-header,
+.state-switcher,
+.chat-form {
+  display: flex;
+  gap: 12px;
+}
+
+.panel-header {
+  align-items: end;
+  justify-content: space-between;
+}
+
+.eyebrow,
+.state-label,
+.message-role {
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-size: 0.72rem;
+  color: var(--muted);
+}
+
+h1 {
+  margin: 6px 0 0;
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4vw, 3.5rem);
+  font-weight: 500;
+  letter-spacing: 0.08em;
+}
+
+.state-readout {
+  text-align: right;
+}
+
+.state-readout-inline {
+  margin-top: 14px;
+  text-align: left;
+}
+
+.state-heading {
+  display: block;
+  font-family: var(--font-display);
+  font-size: clamp(1.05rem, 1.6vw, 1.5rem);
+  letter-spacing: 0.12em;
+  color: var(--accent-strong);
+}
+
+.state-switcher {
+  flex-wrap: wrap;
+}
+
+.state-button,
+#send-button {
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text);
+  border-radius: 999px;
+  cursor: pointer;
+  transition:
+    transform 140ms ease,
+    background 140ms ease,
+    border-color 140ms ease,
+    opacity 140ms ease;
+}
+
+.state-button {
+  position: relative;
+  padding: 10px 16px;
+  min-width: 96px;
+  overflow: visible;
+}
+
+.state-button:hover,
+#send-button:hover {
+  transform: translateY(-1px);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.state-button.is-active {
+  color: var(--accent-strong);
+  border-color: rgba(222, 209, 181, 0.72);
+  background: rgba(222, 209, 181, 0.16);
+  box-shadow:
+    0 0 0 1px rgba(222, 209, 181, 0.34) inset,
+    0 0 22px rgba(222, 209, 181, 0.28),
+    0 0 46px rgba(222, 209, 181, 0.2),
+    0 0 72px rgba(222, 209, 181, 0.12);
+  animation:
+    state-glow var(--state-breath-duration, 3.8s) ease-in-out var(--state-breath-delay, 0s) infinite;
+}
+
+.state-button.is-active::after {
+  content: "";
+  position: absolute;
+  inset: -8px;
+  border-radius: 999px;
+  background: radial-gradient(circle, rgba(222, 209, 181, 0.26) 0%, rgba(222, 209, 181, 0.08) 45%, transparent 72%);
+  opacity: 0.8;
+  z-index: -1;
+  animation:
+    state-aura var(--state-breath-duration, 3.8s) ease-in-out var(--state-breath-delay, 0s) infinite;
+}
+
+.state-button:disabled {
+  cursor: default;
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+.state-button.is-active:disabled {
+  opacity: 1;
+}
+
+.presence {
+  padding: 14px 16px;
+  border-left: 1px solid rgba(222, 209, 181, 0.3);
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.035), transparent);
+}
+
+.presence p {
+  margin: 0;
+  font-family: var(--font-display);
+  color: var(--accent);
+  transition:
+    opacity 280ms ease,
+    transform 280ms ease,
+    filter 280ms ease;
+}
+
+.chat-log {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  overflow-y: scroll;
+  padding-right: 8px;
+  height: 100%;
+  min-height: 0;
+  scrollbar-gutter: stable;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(222, 209, 181, 0.38) rgba(255, 255, 255, 0.04);
+}
+
+.chat-log::-webkit-scrollbar {
+  width: 12px;
+}
+
+.chat-log::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 999px;
+}
+
+.chat-log::-webkit-scrollbar-thumb {
+  background: rgba(222, 209, 181, 0.38);
+  border-radius: 999px;
+  border: 2px solid rgba(8, 10, 13, 0.4);
+}
+
+.chat-log::-webkit-scrollbar-thumb:hover {
+  background: rgba(222, 209, 181, 0.52);
+}
+
+.message {
+  max-width: 88%;
+  padding: 14px 16px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  animation: fade-in 320ms ease;
+}
+
+.message.user {
+  align-self: flex-end;
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.message.kuroo {
+  align-self: flex-start;
+}
+
+.message-body {
+  margin: 8px 0 0;
+  white-space: pre-wrap;
+  line-height: 1.85;
+}
+
+.message-body.is-typing::after {
+  content: "";
+  display: inline-block;
+  width: 0.58em;
+  height: 1.05em;
+  margin-left: 0.14em;
+  vertical-align: -0.12em;
+  border-radius: 999px;
+  background: rgba(222, 209, 181, 0.8);
+  animation: typing-cursor 0.9s ease-in-out infinite;
+}
+
+.chat-form {
+  align-items: end;
+}
+
+body.is-session-locked .chat-form {
+  pointer-events: none;
+  opacity: 0.52;
+}
+
+@keyframes typing-cursor {
+  0%,
+  100% {
+    opacity: 0.2;
+  }
+
+  50% {
+    opacity: 0.9;
+  }
+}
+
+.state-presence {
+  position: fixed;
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 8;
+  transition: opacity 1200ms ease;
+}
+
+.state-presence-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+  opacity: 0;
+  filter: blur(0.2px) saturate(0.95);
+  transform: scale(1.01);
+  transition:
+    opacity 1200ms ease,
+    filter 1200ms ease,
+    transform 1200ms ease;
+}
+
+.state-presence-noise {
+  position: absolute;
+  inset: 0;
+  opacity: 0.08;
+  background:
+    repeating-linear-gradient(
+      0deg,
+      rgba(255, 255, 255, 0.025) 0,
+      rgba(255, 255, 255, 0.025) 1px,
+      transparent 1px,
+      transparent 6px
+    ),
+    linear-gradient(180deg, rgba(7, 8, 10, 0.12), rgba(7, 8, 10, 0.3));
+}
+
+.state-vision {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 900ms ease;
+  z-index: 12;
+}
+
+.state-vision-backdrop {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at center, rgba(10, 10, 10, 0.1), rgba(0, 0, 0, 0.58) 72%);
+  opacity: 0;
+  transition: opacity 900ms ease;
+}
+
+.state-vision-image {
+  position: relative;
+  z-index: 1;
+  width: min(72vw, 760px);
+  max-height: 76vh;
+  object-fit: contain;
+  opacity: 0;
+  filter: blur(10px) saturate(0.82);
+  transform: scale(1.02);
+  box-shadow: 0 28px 80px rgba(0, 0, 0, 0.42);
+  transition:
+    opacity 900ms ease,
+    filter 900ms ease,
+    transform 900ms ease;
+}
+
+body.is-state-vision-visible .state-vision {
+  opacity: 1;
+}
+
+body.is-state-vision-visible .state-vision-backdrop {
+  opacity: 1;
+}
+
+body.is-state-vision-visible .state-vision-image {
+  opacity: 0.9;
+  filter: blur(0) saturate(0.9);
+  transform: scale(1);
+}
+
+body.has-state-presence .state-presence-noise {
+  animation:
+    presence-noise 6.4s steps(2, end) infinite,
+    presence-aura var(--presence-breath-duration, 5.2s) ease-in-out var(--presence-breath-delay, 0s) infinite;
+}
+
+body.has-state-presence .state-presence {
+  opacity: 0.42;
+}
+
+body.has-state-presence .state-presence-image {
+  opacity: 0.5;
+  filter: blur(0.25px) saturate(0.98);
+  transform: scale(1.01);
+  animation:
+    presence-breath var(--presence-breath-duration, 5.2s) ease-in-out var(--presence-breath-delay, 0s) infinite;
+}
+
+#message-input {
+  flex: 1;
+  resize: none;
+  min-height: 86px;
+  padding: 16px;
+  border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(0, 0, 0, 0.24);
+  color: var(--text);
+  font: inherit;
+  line-height: 1.6;
+}
+
+#message-input:focus {
+  outline: none;
+  border-color: rgba(222, 209, 181, 0.36);
+  box-shadow: 0 0 0 1px rgba(222, 209, 181, 0.12);
+}
+
+#send-button {
+  padding: 14px 22px;
+  height: fit-content;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+body.is-shifting .panel {
+  animation: state-pulse 620ms ease;
+}
+
+body.is-shifting .presence p {
+  opacity: 0.45;
+  transform: translateY(3px);
+  filter: blur(1.5px);
+}
+
+body.is-naraku-ending .app-shell {
+  opacity: 0.18;
+  filter: blur(4px);
+  transform: scale(0.992);
+}
+
+body[data-state="gokurou"] .panel,
+body[data-state="narakurou"] .panel {
+  border-color: rgba(141, 82, 77, 0.2);
+  box-shadow:
+    0 24px 70px rgba(0, 0, 0, 0.62),
+    inset 0 1px 0 rgba(141, 82, 77, 0.06);
+}
+
+body[data-state="gokurou"] .presence p,
+body[data-state="narakurou"] .presence p {
+  color: #c48f8a;
+}
+
+body[data-state="gokurou"] .state-button.is-active,
+body[data-state="narakurou"] .state-button.is-active {
+  color: #deb0aa;
+  border-color: rgba(196, 143, 138, 0.82);
+  background: rgba(196, 143, 138, 0.2);
+  box-shadow:
+    0 0 0 1px rgba(196, 143, 138, 0.4) inset,
+    0 0 24px rgba(196, 143, 138, 0.32),
+    0 0 48px rgba(141, 82, 77, 0.28),
+    0 0 78px rgba(141, 82, 77, 0.18);
+}
+
+body[data-state="gokurou"] .state-button.is-active::after,
+body[data-state="narakurou"] .state-button.is-active::after {
+  background: radial-gradient(circle, rgba(196, 143, 138, 0.3) 0%, rgba(141, 82, 77, 0.1) 46%, transparent 74%);
+}
+
+body[data-state="getsurou"] .presence p,
+body[data-state="teneirou"] .presence p {
+  color: #c5d2c5;
+}
+
+body[data-state="getsurou"] .state-button.is-active,
+body[data-state="teneirou"] .state-button.is-active {
+  color: #d7e1d7;
+  border-color: rgba(197, 210, 197, 0.82);
+  background: rgba(197, 210, 197, 0.2);
+  box-shadow:
+    0 0 0 1px rgba(197, 210, 197, 0.4) inset,
+    0 0 24px rgba(197, 210, 197, 0.3),
+    0 0 50px rgba(155, 177, 173, 0.24),
+    0 0 82px rgba(155, 177, 173, 0.14);
+}
+
+body[data-state="getsurou"] .state-button.is-active::after,
+body[data-state="teneirou"] .state-button.is-active::after {
+  background: radial-gradient(circle, rgba(197, 210, 197, 0.3) 0%, rgba(155, 177, 173, 0.1) 48%, transparent 76%);
+}
+
+body[data-state="kinmourou"] .presence p {
+  color: #d9c67e;
+}
+
+body[data-state="kinmourou"] .state-button.is-active {
+  color: #ead792;
+  border-color: rgba(217, 198, 126, 0.84);
+  background: rgba(217, 198, 126, 0.22);
+  box-shadow:
+    0 0 0 1px rgba(217, 198, 126, 0.42) inset,
+    0 0 26px rgba(217, 198, 126, 0.34),
+    0 0 56px rgba(217, 198, 126, 0.26),
+    0 0 88px rgba(217, 198, 126, 0.16);
+}
+
+body[data-state="kinmourou"] .state-button.is-active::after {
+  background: radial-gradient(circle, rgba(217, 198, 126, 0.34) 0%, rgba(217, 198, 126, 0.12) 48%, transparent 76%);
+}
+
+@keyframes state-glow {
+  0%,
+  100% {
+    filter: brightness(1);
+    transform: scale(1);
+  }
+
+  50% {
+    filter: brightness(var(--state-breath-brightness, 1.18));
+    transform: scale(var(--state-breath-scale, 1.018));
+  }
+}
+
+@keyframes state-aura {
+  0%,
+  100% {
+    opacity: var(--state-aura-opacity-min, 0.55);
+    transform: scale(var(--state-aura-scale-min, 0.98));
+  }
+
+  50% {
+    opacity: var(--state-aura-opacity-max, 1);
+    transform: scale(var(--state-aura-scale-max, 1.08));
+  }
+}
+
+@keyframes presence-breath {
+  0%,
+  100% {
+    opacity: var(--presence-opacity-min, 0.46);
+    filter: blur(0.25px) saturate(0.98);
+    transform: scale(1.01);
+  }
+
+  50% {
+    opacity: var(--presence-opacity-max, 0.58);
+    filter: blur(0.12px) saturate(var(--presence-saturate-max, 1.02));
+    transform: scale(var(--presence-scale-max, 1.028));
+  }
+}
+
+@keyframes presence-aura {
+  0%,
+  100% {
+    opacity: var(--presence-noise-min, 0.08);
+  }
+
+  50% {
+    opacity: var(--presence-noise-max, 0.13);
+  }
+}
+
+.naraku-overlay {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 900ms ease;
+}
+
+.naraku-noise {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(rgba(0, 0, 0, 0.12), rgba(0, 0, 0, 0.32)),
+    repeating-linear-gradient(
+      0deg,
+      rgba(255, 255, 255, 0.03) 0,
+      rgba(255, 255, 255, 0.03) 1px,
+      transparent 1px,
+      transparent 4px
+    ),
+    radial-gradient(circle at center, rgba(125, 39, 35, 0.22), rgba(0, 0, 0, 0.88) 68%);
+  mix-blend-mode: screen;
+  filter: blur(0.3px);
+}
+
+.naraku-caption {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(1.1rem, 2vw, 1.5rem);
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: rgba(226, 212, 196, 0.82);
+  opacity: 0;
+  transform: translateY(10px);
+  transition:
+    opacity 700ms ease,
+    transform 700ms ease;
+}
+
+body.is-naraku-ending .naraku-overlay {
+  opacity: 1;
+}
+
+body.is-naraku-ending .naraku-caption {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes drift {
+  from {
+    transform: scale(1) translateY(-8px);
+  }
+
+  to {
+    transform: scale(1.04) translateY(10px);
+  }
+}
+
+@keyframes state-pulse {
+  0% {
+    opacity: 0.92;
+    transform: scale(0.996);
+  }
+
+  45% {
+    opacity: 1;
+    transform: scale(1.008);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes presence-breathe {
+  0% {
+    opacity: 0.4;
+  }
+
+  48% {
+    opacity: 0.48;
+  }
+
+  100% {
+    opacity: 0.42;
+  }
+}
+
+@keyframes presence-noise {
+  0% {
+    opacity: 0.1;
+    transform: translate3d(0, 0, 0);
+  }
+
+  33% {
+    opacity: 0.18;
+    transform: translate3d(0.5px, -0.4px, 0);
+  }
+
+  66% {
+    opacity: 0.12;
+    transform: translate3d(-0.4px, 0.6px, 0);
+  }
+
+  100% {
+    opacity: 0.16;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@media (max-width: 720px) {
+  body {
+    overflow: auto;
+  }
+
+  .state-presence {
+    z-index: 6;
+  }
+
+  .state-presence-image {
+    object-fit: contain;
+    object-position: center 22%;
+    transform: scale(1);
+    filter: blur(0.15px) saturate(0.94);
+  }
+
+  body.has-state-presence .state-presence {
+    opacity: 0.32;
+  }
+
+  body.has-state-presence .state-presence-image {
+    opacity: 0.42;
+    transform: scale(1);
+  }
+
+  .state-vision-image {
+    width: min(92vw, 560px);
+    max-height: 68vh;
+  }
+
+  .app-shell {
+    padding: 12px;
+  }
+
+  .panel {
+    height: calc(100vh - 24px);
+    padding: 18px;
+    border-radius: 18px;
+  }
+
+  .panel-header,
+  .chat-form {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .state-readout {
+    text-align: left;
+  }
+
+  .message {
+    max-width: 100%;
+  }
+}
