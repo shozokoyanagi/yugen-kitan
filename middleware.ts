@@ -21,8 +21,9 @@ function safeEquals(a: string, b: string) {
 export function middleware(request: NextRequest) {
   const expectedUser = process.env.BASIC_AUTH_USER;
   const expectedPassword = process.env.BASIC_AUTH_PASSWORD;
+  const isLiffLaunch = request.nextUrl.searchParams.has("liff.state");
 
-  if (!expectedUser || !expectedPassword) {
+  if (!expectedUser || !expectedPassword || isLiffLaunch) {
     return NextResponse.next();
   }
 

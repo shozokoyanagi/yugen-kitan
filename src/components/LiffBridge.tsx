@@ -24,8 +24,7 @@ export function LiffBridge({ staff, currentStaffId, lineUserId, month }: LiffBri
       const liff = (await import("@line/liff")).default;
       await liff.init({ liffId });
 
-      if (!liff.isLoggedIn() && !liff.isInClient()) {
-        liff.login();
+      if (!liff.isInClient()) {
         return;
       }
 
