@@ -75,13 +75,13 @@ export function ShiftCsvImport() {
         <Upload className="h-5 w-5 text-leaf-700" />
         <h2 className="text-lg font-bold">基本シフトCSV取り込み</h2>
       </div>
-      <p className="mb-3 text-sm text-stone-600">形式: date,staffName,workCode。例: 2026-05-01,佐藤,①</p>
+      <p className="mb-3 text-sm text-stone-600">形式: date,staffName,workCode。例: 2026-05-01,佐藤,1</p>
       <form action={importShiftCsvAction} className="space-y-2">
         <textarea
           name="csv"
           rows={7}
           className="w-full rounded-md border border-stone-300 px-3 py-2 font-mono text-sm"
-          defaultValue={"date,staffName,workCode\n2026-05-01,佐藤 花,①\n2026-05-01,田中 誠,②\n2026-05-01,鈴木 里奈,③"}
+          defaultValue={"date,staffName,workCode\n2026-05-01,佐藤 花,1\n2026-05-01,田中 誠,2\n2026-05-01,鈴木 里奈,3"}
         />
         <button className="rounded-md bg-stone-800 px-3 py-2 text-sm font-semibold text-white">取り込む</button>
       </form>

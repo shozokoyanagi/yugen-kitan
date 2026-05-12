@@ -37,7 +37,10 @@ export async function createStaff(formData: FormData) {
 export async function createShift(formData: FormData) {
   const staffId = String(formData.get("staffId"));
   const date = toDateOnly(String(formData.get("date")));
-  const workCode = String(formData.get("workCode") || "①");
+  const workCode = String(formData.get("workCode") || "1")
+    .replaceAll("①", "1")
+    .replaceAll("②", "2")
+    .replaceAll("③", "3");
   const month = String(formData.get("month") || isoDate(date).slice(0, 7));
 
   await prisma.shift.upsert({

@@ -165,9 +165,9 @@ export function ShiftBoard({
                                 <input type="hidden" name="date" value={date} />
                                 <input type="hidden" name="month" value={month} />
                                 <select name="workCode" className="min-w-0 flex-1 rounded border border-stone-200 text-xs">
-                                  <option>①</option>
-                                  <option>②</option>
-                                  <option>③</option>
+                                  <option>1</option>
+                                  <option>2</option>
+                                  <option>3</option>
                                 </select>
                                 <button className="rounded bg-stone-800 p-1 text-white" title="シフト追加">
                                   <Plus className="h-3.5 w-3.5" />

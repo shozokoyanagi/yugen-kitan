@@ -46,7 +46,11 @@ function cellLabel(shift?: Shift, leave?: LeaveWithOffers) {
   if (leave?.substituteOffers.some((offer) => offer.status === "PENDING")) return "候補あり";
   if (leave?.status === "SEEKING_SUBSTITUTE") return "代替募集中";
   if (leave && leave.status !== "REJECTED") return "有給申請中";
-  return shift?.workCode ?? "";
+  return normalizeWorkCode(shift?.workCode ?? "");
+}
+
+function normalizeWorkCode(workCode: string) {
+  return workCode.replaceAll("①", "1").replaceAll("②", "2").replaceAll("③", "3");
 }
 
 export function PaperShiftTable({

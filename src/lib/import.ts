@@ -13,7 +13,8 @@ export function parseShiftCsv(csv: string): ShiftImportRow[] {
     .map((line) => line.trim())
     .filter(Boolean)
     .map((line, index) => {
-      const [date, staffName, workCode] = line.split(",").map((part) => part.trim());
+    const [date, staffName, rawWorkCode] = line.split(",").map((part) => part.trim());
+    const workCode = rawWorkCode?.replaceAll("①", "1").replaceAll("②", "2").replaceAll("③", "3");
       if (index === 0 && date === "date") return null;
       if (!date || !staffName || !workCode) {
         throw new Error(`${index + 1}行目の形式を確認してください`);
