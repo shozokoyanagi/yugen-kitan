@@ -97,14 +97,14 @@ export function PaperShiftTable({
       </div>
 
       <div className="table-scroll overflow-x-auto pb-2">
-        <table className="border-collapse text-center text-[13px] font-bold">
+        <table className="select-none border-collapse text-center text-[13px] font-bold">
           <thead>
             <tr>
               <th className="sticky left-0 z-20 h-8 min-w-24 border-2 border-black bg-white" />
               {days.map((day) => (
                 <th
                   key={isoDate(day)}
-                  className={clsx("h-8 min-w-10 border-2 border-black", isYellowDay(day) ? "bg-yellow-300" : "bg-white")}
+                  className={clsx("h-8 min-w-12 border-2 border-black", isYellowDay(day) ? "bg-yellow-300" : "bg-white")}
                 >
                   {day.getDate()}
                 </th>
@@ -117,7 +117,7 @@ export function PaperShiftTable({
               {days.map((day) => (
                 <th
                   key={`${isoDate(day)}-w`}
-                  className={clsx("h-8 min-w-10 border-2 border-black", isYellowDay(day) ? "bg-yellow-300" : "bg-white")}
+                  className={clsx("h-8 min-w-12 border-2 border-black", isYellowDay(day) ? "bg-yellow-300" : "bg-white")}
                 >
                   {weekdayLabels[day.getDay()]}
                 </th>
@@ -127,7 +127,7 @@ export function PaperShiftTable({
           <tbody>
             {staff.map((person) => (
               <tr key={person.id}>
-                <th className="sticky left-0 z-10 h-10 min-w-24 whitespace-nowrap border-2 border-black bg-white px-2 text-left">
+                <th className="sticky left-0 z-10 h-12 min-w-24 whitespace-nowrap border-2 border-black bg-white px-2 text-left">
                   {person.name}
                 </th>
                 {days.map((day) => {
@@ -145,7 +145,7 @@ export function PaperShiftTable({
                   const isCandidate = leave?.substituteOffers.some((offer) => offer.status === "PENDING");
 
                   const className = clsx(
-                    "h-10 min-w-10 border-2 border-black p-0 align-middle",
+                    "h-12 min-w-12 border-2 border-black p-0 align-middle",
                     isYellowDay(day) && "bg-yellow-300",
                     leave?.status === "SEEKING_SUBSTITUTE" && "bg-red-100",
                     isCandidate && "bg-pink-200",
@@ -157,12 +157,14 @@ export function PaperShiftTable({
                   if (canRequestLeave) {
                     return (
                       <td key={`${person.id}-${date}`} className={className}>
-                        <form action={createLeaveRequest}>
+                        <form action={createLeaveRequest} className="h-full w-full">
                           <input type="hidden" name="staffId" value={person.id} />
                           <input type="hidden" name="date" value={date} />
                           <input type="hidden" name="month" value={month} />
                           <input type="hidden" name="type" value="FULL" />
-                          <button className="h-10 w-full px-1 font-black">{label}</button>
+                          <button type="submit" className="shift-cell-button flex h-12 w-full items-center justify-center px-1 font-black">
+                            {label}
+                          </button>
                         </form>
                       </td>
                     );
@@ -171,11 +173,13 @@ export function PaperShiftTable({
                   if (canOffer) {
                     return (
                       <td key={`${person.id}-${date}`} className={className}>
-                        <form action={createSubstituteOffer}>
+                        <form action={createSubstituteOffer} className="h-full w-full">
                           <input type="hidden" name="leaveRequestId" value={leave.id} />
                           <input type="hidden" name="staffId" value={currentStaffId} />
                           <input type="hidden" name="month" value={month} />
-                          <button className="h-10 w-full px-1 text-[11px] font-black">{label}</button>
+                          <button type="submit" className="shift-cell-button flex h-12 w-full items-center justify-center px-1 text-[11px] font-black">
+                            {label}
+                          </button>
                         </form>
                       </td>
                     );
@@ -184,16 +188,20 @@ export function PaperShiftTable({
                   if (isAdmin && leave && leave.status !== "APPROVED") {
                     return (
                       <td key={`${person.id}-${date}`} className={className}>
-                        <div className="grid h-10 grid-cols-2">
-                          <form action={approveLeaveFromCell}>
+                        <div className="grid h-12 grid-cols-2">
+                          <form action={approveLeaveFromCell} className="h-full w-full">
                             <input type="hidden" name="leaveRequestId" value={leave.id} />
                             <input type="hidden" name="month" value={month} />
-                            <button className="h-10 w-full text-[10px] font-black">承認</button>
+                            <button type="submit" className="shift-cell-button flex h-12 w-full items-center justify-center text-[10px] font-black">
+                              承認
+                            </button>
                           </form>
-                          <form action={rejectLeaveFromCell}>
+                          <form action={rejectLeaveFromCell} className="h-full w-full">
                             <input type="hidden" name="id" value={leave.id} />
                             <input type="hidden" name="month" value={month} />
-                            <button className="h-10 w-full border-l-2 border-black text-[10px] font-black">却下</button>
+                            <button type="submit" className="shift-cell-button flex h-12 w-full items-center justify-center border-l-2 border-black text-[10px] font-black">
+                              却下
+                            </button>
                           </form>
                         </div>
                       </td>
@@ -206,8 +214,8 @@ export function PaperShiftTable({
                     </td>
                   );
                 })}
-                <td className="h-10 min-w-16 border-2 border-black bg-white">{requiredCount.get(person.id) ?? 0}</td>
-                <td className="h-10 min-w-12 border-2 border-black bg-white">
+                <td className="h-12 min-w-16 border-2 border-black bg-white">{requiredCount.get(person.id) ?? 0}</td>
+                <td className="h-12 min-w-12 border-2 border-black bg-white">
                   {shifts.filter((shift) => shift.replacedStaffId === person.id).length || ""}
                 </td>
               </tr>
