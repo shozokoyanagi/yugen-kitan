@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: minnano-yukyu-shift
+    env: docker
+    plan: starter
+    autoDeploy: true
+    disk:
+      name: shift-sqlite-data
+      mountPath: /data
+      sizeGB: 1
+    envVars:
+      - key: DATABASE_URL
+        value: file:/data/dev.db
+      - key: BASIC_AUTH_USER
+        sync: false
+      - key: BASIC_AUTH_PASSWORD
+        sync: false

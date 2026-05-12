@@ -1,0 +1,83 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Staff {
+  id                String             @id @default(cuid())
+  name              String
+  joinedAt          DateTime
+  paidLeaveBalance  Float
+  role              String             @default("STAFF")
+  shifts            Shift[]
+  leaveRequests     LeaveRequest[]
+  substituteOffers  SubstituteOffer[]
+  leaveHistories    PaidLeaveHistory[]
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+}
+
+model Shift {
+  id              String   @id @default(cuid())
+  date            DateTime
+  workCode        String
+  staffId         String
+  staff           Staff    @relation(fields: [staffId], references: [id], onDelete: Cascade)
+  isSubstitute    Boolean  @default(false)
+  replacedStaffId String?
+  source          String   @default("manual")
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@unique([date, staffId])
+  @@index([date])
+}
+
+model LeaveRequest {
+  id                  String            @id @default(cuid())
+  date                DateTime
+  type                String
+  memo                String?
+  status              String            @default("APPROVABLE")
+  staffId             String
+  staff               Staff             @relation(fields: [staffId], references: [id], onDelete: Cascade)
+  substituteStaffId   String?
+  decidedAt           DateTime?
+  rejectedReason      String?
+  substituteOffers    SubstituteOffer[]
+  histories           PaidLeaveHistory[]
+  createdAt           DateTime          @default(now())
+  updatedAt           DateTime          @updatedAt
+
+  @@index([date])
+}
+
+model SubstituteOffer {
+  id             String       @id @default(cuid())
+  leaveRequestId String
+  leaveRequest   LeaveRequest @relation(fields: [leaveRequestId], references: [id], onDelete: Cascade)
+  staffId        String
+  staff          Staff        @relation(fields: [staffId], references: [id], onDelete: Cascade)
+  message        String?
+  status         String       @default("PENDING")
+  decidedAt      DateTime?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  @@unique([leaveRequestId, staffId])
+}
+
+model PaidLeaveHistory {
+  id             String       @id @default(cuid())
+  staffId        String
+  staff          Staff        @relation(fields: [staffId], references: [id], onDelete: Cascade)
+  leaveRequestId String
+  leaveRequest   LeaveRequest @relation(fields: [leaveRequestId], references: [id], onDelete: Cascade)
+  amount         Float
+  note           String
+  createdAt      DateTime     @default(now())
+}

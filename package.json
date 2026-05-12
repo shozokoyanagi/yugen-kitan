@@ -1,12 +1,46 @@
 {
-  "name": "kuroo-prototype",
+  "name": "small-team-leave-shift",
   "version": "1.0.0",
-  "description": "Prototype chat experience for Kuroo in Yugen Kitan.",
+  "description": "小規模職場向けの有給休暇とシフト調整プロトタイプ",
   "private": true,
-  "dependencies": {
-    "openai": "^5.12.2"
-  },
   "scripts": {
-    "start": "node server.js"
+    "dev": "next dev -H 127.0.0.1",
+    "dev:network": "next dev -H 0.0.0.0",
+    "build": "prisma generate && next build",
+    "start": "next start -H 0.0.0.0 -p ${PORT:-3000}",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate dev",
+    "prisma:seed": "tsx prisma/seed.ts",
+    "db:init": "node scripts/init-db.mjs --reset && prisma generate",
+    "db:setup": "node scripts/init-db.mjs && prisma generate",
+    "db:reset": "npm run db:init && npm run prisma:seed",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.22.0",
+    "clsx": "^2.1.1",
+    "date-fns": "^3.6.0",
+    "next": "^14.2.23",
+    "openai": "^5.12.2",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "lucide-react": "^0.468.0",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "@types/react": "^18.3.18",
+    "@types/react-dom": "^18.3.5",
+    "autoprefixer": "^10.4.20",
+    "eslint": "^8.57.1",
+    "eslint-config-next": "^14.2.23",
+    "postcss": "^8.4.49",
+    "prisma": "^5.22.0",
+    "tailwindcss": "^3.4.17",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  },
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
   }
 }
