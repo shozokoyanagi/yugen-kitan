@@ -51,18 +51,20 @@ export function LiffBridge({ staff, currentStaffId, lineUserId, month }: LiffBri
   if (!detectedLineUserId || currentStaffId) return null;
 
   return (
-    <form action={linkLineStaff} className="mx-2 mb-2 flex items-center gap-2 rounded border border-black bg-white p-2 text-xs">
+    <form action={linkLineStaff} className="mx-2 mb-2 border-2 border-black bg-yellow-200 p-3 text-sm">
       <input type="hidden" name="lineUserId" value={detectedLineUserId} />
       <input type="hidden" name="month" value={month} />
-      <span className="font-bold">LINE紐づけ</span>
-      <select name="staffId" className="min-w-0 flex-1 border border-black bg-white px-2 py-1">
-        {staff.map((person) => (
-          <option key={person.id} value={person.id}>
-            {person.name}
-          </option>
-        ))}
-      </select>
-      <button className="border border-black bg-yellow-200 px-2 py-1 font-bold">保存</button>
+      <div className="mb-2 font-black">最初に自分の名前を選んで保存してください</div>
+      <div className="flex items-center gap-2">
+        <select name="staffId" className="min-w-0 flex-1 border-2 border-black bg-white px-2 py-2 font-bold">
+          {staff.map((person) => (
+            <option key={person.id} value={person.id}>
+              {person.name}
+            </option>
+          ))}
+        </select>
+        <button className="border-2 border-black bg-white px-4 py-2 font-black">保存</button>
+      </div>
     </form>
   );
 }

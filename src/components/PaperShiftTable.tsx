@@ -16,6 +16,7 @@ type PaperShiftTableProps = {
   leaves: LeaveWithOffers[];
   currentStaffId: string;
   isAdmin: boolean;
+  interactionsDisabled?: boolean;
 };
 
 const holidayDates = new Set([
@@ -61,6 +62,7 @@ export function PaperShiftTable({
   leaves,
   currentStaffId,
   isAdmin,
+  interactionsDisabled = false,
 }: PaperShiftTableProps) {
   const shiftMap = new Map(shifts.map((shift) => [`${isoDate(shift.date)}:${shift.staffId}`, shift]));
   const leaveMap = new Map<string, LeaveWithOffers>();
@@ -135,8 +137,9 @@ export function PaperShiftTable({
                   const shift = shiftMap.get(`${date}:${person.id}`);
                   const leave = leaveMap.get(`${date}:${person.id}`);
                   const label = cellLabel(shift, leave);
-                  const canRequestLeave = person.id === currentStaffId && shift && !leave;
+                  const canRequestLeave = !interactionsDisabled && person.id === currentStaffId && shift && !leave;
                   const canOffer =
+                    !interactionsDisabled &&
                     leave &&
                     leave.staffId !== currentStaffId &&
                     !shiftMap.get(`${date}:${currentStaffId}`) &&
@@ -185,7 +188,7 @@ export function PaperShiftTable({
                     );
                   }
 
-                  if (isAdmin && leave && leave.status !== "APPROVED") {
+                  if (!interactionsDisabled && isAdmin && leave && leave.status !== "APPROVED") {
                     return (
                       <td key={`${person.id}-${date}`} className={className}>
                         <div className="grid h-12 grid-cols-2">

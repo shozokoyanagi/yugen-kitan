@@ -14,6 +14,7 @@ export default async function HomePage({
   const lineStaff = searchParams.lineUserId
     ? staff.find((person) => person.lineUserId === searchParams.lineUserId)
     : undefined;
+  const needsLineLink = Boolean(searchParams.lineUserId && !lineStaff);
   const currentStaff = lineStaff ?? staff.find((person) => person.id === searchParams.staffId) ?? staff[0];
   const monthStart = days[0];
   const monthEnd = days[days.length - 1];
@@ -61,6 +62,12 @@ export default async function HomePage({
         month={month}
       />
 
+      {needsLineLink && (
+        <div className="mx-2 mb-2 border-2 border-black bg-white p-2 text-xs font-bold">
+          名前を保存するまで、誤申請防止のためシフト表のタップ操作は止めています。
+        </div>
+      )}
+
       <PaperShiftTable
         month={month}
         days={days}
@@ -69,6 +76,7 @@ export default async function HomePage({
         leaves={leaves}
         currentStaffId={currentStaff.id}
         isAdmin={currentStaff.role === "ADMIN"}
+        interactionsDisabled={needsLineLink}
       />
     </main>
   );
