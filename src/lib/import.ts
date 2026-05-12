@@ -1,5 +1,5 @@
-import { prisma } from "@/lib/prisma";
-import { toDateOnly } from "@/lib/date";
+import { prisma } from "./prisma";
+import { toDateOnly } from "./date";
 
 export type ShiftImportRow = {
   date: string;

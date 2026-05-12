@@ -1,5 +1,5 @@
 import { AlertTriangle, CheckCircle2 } from "lucide-react";
-import { isoDate, jpDate } from "@/lib/date";
+import { isoDate, jpDate } from "../lib/date";
 
 type Daily = {
   date: Date;

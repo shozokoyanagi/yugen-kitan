@@ -1,6 +1,6 @@
 import type { LeaveRequest, Staff, SubstituteOffer } from "@prisma/client";
-import { isoDate, jpDate } from "@/lib/date";
-import { StatusBadge } from "@/components/status";
+import { isoDate, jpDate } from "../lib/date";
+import { StatusBadge } from "./status";
 
 type LeaveWithOffers = LeaveRequest & {
   staff: Staff;

@@ -2,12 +2,12 @@
 
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
-import { isoDate, toDateOnly } from "@/lib/date";
-import { evaluateLeaveStatus, leaveAmount } from "@/lib/leaveRules";
-import { importShiftRows, parseShiftCsv } from "@/lib/import";
-import { notifyTeam } from "@/lib/notifications";
-import { prisma } from "@/lib/prisma";
-import type { LeaveStatus, LeaveType, OfferStatus, Role } from "@/types/domain";
+import { isoDate, toDateOnly } from "../src/lib/date";
+import { evaluateLeaveStatus, leaveAmount } from "../src/lib/leaveRules";
+import { importShiftRows, parseShiftCsv } from "../src/lib/import";
+import { notifyTeam } from "../src/lib/notifications";
+import { prisma } from "../src/lib/prisma";
+import type { LeaveStatus, LeaveType, OfferStatus, Role } from "../src/types/domain";
 
 function refresh(month?: string) {
   revalidatePath("/");

@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import type { LeaveStatus, OfferStatus } from "@/types/domain";
+import type { LeaveStatus, OfferStatus } from "../types/domain";
 
 const leaveLabels: Record<LeaveStatus, string> = {
   APPROVABLE: "承認可能",

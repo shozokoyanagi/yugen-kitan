@@ -1,6 +1,6 @@
 import type { Staff } from "@prisma/client";
 import { Upload, UserPlus } from "lucide-react";
-import { createStaff, importShiftCsvAction } from "@app/actions";
+import { createStaff, importShiftCsvAction } from "../../app/actions";
 
 export function CurrentStaffSelector({
   staff,

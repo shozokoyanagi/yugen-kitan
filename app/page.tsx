@@ -1,13 +1,13 @@
 import Link from "next/link";
 import { Suspense } from "react";
 import { Home, ShieldCheck } from "lucide-react";
-import { CurrentStaffSelector, MonthSelector, ShiftCsvImport, StaffCreateForm } from "@/components/QuickForms";
-import { DailyStaffing } from "@/components/DailyStaffing";
-import { LeaveCalendar } from "@/components/LeaveCalendar";
-import { ShiftBoard } from "@/components/ShiftBoard";
-import { currentMonth, daysInMonth, isoDate, monthLabel } from "@/lib/date";
-import { dailyStaffing } from "@/lib/leaveRules";
-import { prisma } from "@/lib/prisma";
+import { CurrentStaffSelector, MonthSelector, ShiftCsvImport, StaffCreateForm } from "../src/components/QuickForms";
+import { DailyStaffing } from "../src/components/DailyStaffing";
+import { LeaveCalendar } from "../src/components/LeaveCalendar";
+import { ShiftBoard } from "../src/components/ShiftBoard";
+import { currentMonth, daysInMonth } from "../src/lib/date";
+import { dailyStaffing } from "../src/lib/leaveRules";
+import { prisma } from "../src/lib/prisma";
 
 export default async function HomePage({
   searchParams,

@@ -1,9 +1,9 @@
 import Link from "next/link";
 import { ArrowLeft, Check, CircleAlert, X } from "lucide-react";
-import { decideSubstituteOffer, markConsultation, updateLeaveStatus } from "@app/actions";
-import { OfferBadge, StatusBadge } from "@/components/status";
-import { currentMonth, daysInMonth, isoDate, jpDate, monthLabel } from "@/lib/date";
-import { prisma } from "@/lib/prisma";
+import { decideSubstituteOffer, markConsultation, updateLeaveStatus } from "../actions";
+import { OfferBadge, StatusBadge } from "../../src/components/status";
+import { currentMonth, daysInMonth, isoDate, jpDate, monthLabel } from "../../src/lib/date";
+import { prisma } from "../../src/lib/prisma";
 
 export default async function AdminPage({ searchParams }: { searchParams: { month?: string } }) {
   const month = searchParams.month ?? currentMonth();

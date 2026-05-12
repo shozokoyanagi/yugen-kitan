@@ -1,6 +1,6 @@
-import { prisma } from "@/lib/prisma";
-import { toDateOnly } from "@/lib/date";
-import type { LeaveStatus, LeaveType } from "@/types/domain";
+import { prisma } from "./prisma";
+import { toDateOnly } from "./date";
+import type { LeaveStatus, LeaveType } from "../types/domain";
 
 export const MIN_STAFF_PER_DAY = 3;
 

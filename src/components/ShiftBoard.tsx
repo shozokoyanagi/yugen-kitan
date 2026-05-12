@@ -1,9 +1,9 @@
 import type { LeaveRequest, Shift, Staff, SubstituteOffer } from "@prisma/client";
 import clsx from "clsx";
 import { CalendarDays, HandHeart, Plus, Trash2 } from "lucide-react";
-import { createLeaveRequest, createShift, createSubstituteOffer, removeShift } from "@app/actions";
-import { isoDate, jpDate } from "@/lib/date";
-import { StatusBadge } from "@/components/status";
+import { createLeaveRequest, createShift, createSubstituteOffer, removeShift } from "../../app/actions";
+import { isoDate, jpDate } from "../lib/date";
+import { StatusBadge } from "./status";
 
 type LeaveWithOffers = LeaveRequest & {
   staff: Staff;
