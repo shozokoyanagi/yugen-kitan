@@ -22,8 +22,9 @@ export function middleware(request: NextRequest) {
   const expectedUser = process.env.BASIC_AUTH_USER;
   const expectedPassword = process.env.BASIC_AUTH_PASSWORD;
   const isLiffLaunch = request.nextUrl.searchParams.has("liff.state");
+  const isLiffPath = request.nextUrl.pathname === "/liff";
 
-  if (!expectedUser || !expectedPassword || isLiffLaunch) {
+  if (!expectedUser || !expectedPassword || isLiffLaunch || isLiffPath) {
     return NextResponse.next();
   }
 
