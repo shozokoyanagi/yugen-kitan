@@ -55,6 +55,7 @@ BASIC_AUTH_PASSWORD="職場用パスワード"
 ```bash
 npm install
 npm run db:setup
+npm run prisma:seed-if-empty
 npm run build
 npm run start
 ```

@@ -11,6 +11,7 @@
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
     "prisma:seed": "tsx prisma/seed.ts",
+    "prisma:seed-if-empty": "node scripts/seed-if-empty.mjs",
     "db:init": "node scripts/init-db.mjs --reset && prisma generate",
     "db:setup": "node scripts/init-db.mjs && prisma generate",
     "db:reset": "npm run db:init && npm run prisma:seed",
