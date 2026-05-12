@@ -9,6 +9,7 @@ DROP TABLE IF EXISTS "Staff";
 CREATE TABLE "Staff" (
   "id" TEXT NOT NULL PRIMARY KEY,
   "name" TEXT NOT NULL,
+  "lineUserId" TEXT,
   "joinedAt" DATETIME NOT NULL,
   "paidLeaveBalance" REAL NOT NULL,
   "role" TEXT NOT NULL DEFAULT 'STAFF',
@@ -69,6 +70,7 @@ CREATE TABLE "PaidLeaveHistory" (
 );
 
 CREATE UNIQUE INDEX "Shift_date_staffId_key" ON "Shift"("date", "staffId");
+CREATE UNIQUE INDEX "Staff_lineUserId_key" ON "Staff"("lineUserId");
 CREATE INDEX "Shift_date_idx" ON "Shift"("date");
 CREATE INDEX "LeaveRequest_date_idx" ON "LeaveRequest"("date");
 CREATE UNIQUE INDEX "SubstituteOffer_leaveRequestId_staffId_key" ON "SubstituteOffer"("leaveRequestId", "staffId");

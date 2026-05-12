@@ -10,6 +10,7 @@ datasource db {
 model Staff {
   id                String             @id @default(cuid())
   name              String
+  lineUserId        String?            @unique
   joinedAt          DateTime
   paidLeaveBalance  Float
   role              String             @default("STAFF")

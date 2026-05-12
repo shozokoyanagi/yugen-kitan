@@ -20,6 +20,12 @@ if (reset && existsSync(dbPath)) {
 }
 
 if (existsSync(dbPath)) {
+  spawnSync("sqlite3", [dbPath, "ALTER TABLE Staff ADD COLUMN lineUserId TEXT"], {
+    stdio: "ignore",
+  });
+  spawnSync("sqlite3", [dbPath, "CREATE UNIQUE INDEX Staff_lineUserId_key ON Staff(lineUserId)"], {
+    stdio: "ignore",
+  });
   console.log(`SQLite database already exists: ${dbPath}`);
   process.exit(0);
 }
@@ -27,8 +33,9 @@ if (existsSync(dbPath)) {
 mkdirSync(path.dirname(dbPath), { recursive: true });
 
 const initSqlPath = path.resolve(process.cwd(), "prisma/init.sql");
-const result = spawnSync("sqlite3", [dbPath, `.read ${initSqlPath}`], {
-  stdio: "inherit",
+const result = spawnSync("sqlite3", [dbPath], {
+  input: `.read '${initSqlPath}'\n`,
+  stdio: ["pipe", "inherit", "inherit"],
 });
 
 if (result.status !== 0) {

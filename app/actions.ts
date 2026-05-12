@@ -86,6 +86,20 @@ export async function createLeaveRequest(formData: FormData) {
   refresh(month);
 }
 
+export async function linkLineStaff(formData: FormData) {
+  const staffId = String(formData.get("staffId"));
+  const lineUserId = String(formData.get("lineUserId"));
+
+  if (!staffId || !lineUserId) return;
+
+  await prisma.staff.update({
+    where: { id: staffId },
+    data: { lineUserId },
+  });
+
+  refresh();
+}
+
 export async function createSubstituteOffer(formData: FormData) {
   const leaveRequestId = String(formData.get("leaveRequestId"));
   const staffId = String(formData.get("staffId"));
@@ -240,6 +254,40 @@ export async function decideSubstituteOffer(formData: FormData) {
   }
 
   refresh(month || isoDate(offer.leaveRequest.date).slice(0, 7));
+}
+
+export async function approveLeaveFromCell(formData: FormData) {
+  const leaveRequestId = String(formData.get("leaveRequestId"));
+  const month = String(formData.get("month") || "");
+  const leave = await prisma.leaveRequest.findUniqueOrThrow({
+    where: { id: leaveRequestId },
+    include: {
+      substituteOffers: {
+        where: { status: "PENDING" },
+        orderBy: { createdAt: "asc" },
+      },
+    },
+  });
+
+  const firstOffer = leave.substituteOffers[0];
+  if (firstOffer) {
+    const offerData = new FormData();
+    offerData.set("id", firstOffer.id);
+    offerData.set("status", "APPROVED");
+    offerData.set("month", month);
+    await decideSubstituteOffer(offerData);
+  }
+
+  const approveData = new FormData();
+  approveData.set("id", leaveRequestId);
+  approveData.set("status", "APPROVED");
+  approveData.set("month", month);
+  await updateLeaveStatus(approveData);
+}
+
+export async function rejectLeaveFromCell(formData: FormData) {
+  formData.set("status", "REJECTED");
+  await updateLeaveStatus(formData);
 }
 
 export async function importShiftCsvAction(formData: FormData) {
